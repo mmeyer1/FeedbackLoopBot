@@ -8,6 +8,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using DiscordBot.Services;
 using LiteDB;
+using FeedbackLoop.Services;
 
 namespace DiscordBot
 {
@@ -24,6 +25,7 @@ namespace DiscordBot
 
             var services = ConfigureServices();
             services.GetRequiredService<LogService>();
+            services.GetRequiredService<HeartbeatService>().ExecuteAsync();
             await services.GetRequiredService<CommandHandlingService>().InitializeAsync(services);
             var token = Environment.GetEnvironmentVariable("FeedbackLoopToken");
             await _client.LoginAsync(TokenType.Bot, token);
@@ -44,7 +46,8 @@ namespace DiscordBot
                 .AddSingleton<LogService>()
                 // Extra
                 .AddSingleton(new LiteDatabase("bot.db"))
-                // Add additional services here...
+                // Heartbeat
+                .AddSingleton(new HeartbeatService())
                 .BuildServiceProvider();
         }
     }
