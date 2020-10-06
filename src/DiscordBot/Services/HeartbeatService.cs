@@ -23,12 +23,21 @@ namespace FeedbackLoop.Services
             while (true)
             {
                 HttpClient client = new HttpClient();
-                string auth = "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(userName + ':' + userPWD));
-                client.DefaultRequestHeaders.Add("authorization", auth);
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var data = client.GetStringAsync(webjobUrl).Result;
-                var result = JsonConvert.DeserializeObject(data) as JObject;
-                Console.WriteLine("Heartbeat " + result.ToString());
+                Console.WriteLine("Getting Ready To Heartbeat");
+                try
+                {
+                    string auth = "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(userName + ':' + userPWD));
+                    client.DefaultRequestHeaders.Add("authorization", auth);
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    var data = client.GetStringAsync(webjobUrl).Result;
+                    var result = JsonConvert.DeserializeObject(data) as JObject;
+                    Console.WriteLine("Heartbeat " + result.ToString());
+                }
+                catch (Exception E)
+                {
+                    Console.WriteLine("Heartbeat error ! " + E.Message);
+                }
+
                 await Task.Delay(30000);
             }
         }
