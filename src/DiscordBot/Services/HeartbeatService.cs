@@ -12,7 +12,7 @@ namespace FeedbackLoop.Services
 {
     public class HeartbeatService 
     {
-        public async Task ExecuteAsync()
+        public void Heartbeat()
         {
             string websiteName = "feedbacklooper";
             string webjobName = "FeedbackLoopBot";
@@ -36,9 +36,10 @@ namespace FeedbackLoop.Services
                 catch (Exception E)
                 {
                     Console.WriteLine("Heartbeat error ! " + E.Message);
+                } finally
+                {
+                    Thread.Sleep(30000);
                 }
-
-                await Task.Delay(30000);
             }
         }
     }

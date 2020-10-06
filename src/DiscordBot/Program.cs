@@ -25,7 +25,7 @@ namespace DiscordBot
 
             var services = ConfigureServices();
             services.GetRequiredService<LogService>();
-            services.GetRequiredService<HeartbeatService>().ExecuteAsync();
+            Task.Factory.StartNew(() => services.GetRequiredService<HeartbeatService>().Heartbeat());
             await services.GetRequiredService<CommandHandlingService>().InitializeAsync(services);
             var token = Environment.GetEnvironmentVariable("FeedbackLoopToken");
             await _client.LoginAsync(TokenType.Bot, token);
