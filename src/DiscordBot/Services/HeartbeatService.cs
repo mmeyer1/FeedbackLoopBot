@@ -15,10 +15,9 @@ namespace FeedbackLoop.Services
         public void Heartbeat()
         {
             string websiteName = "feedbacklooper";
-            string webjobName = "FeedbackLoopBot";
             string userName = "$FeedbackLooper";
             string userPWD = Environment.GetEnvironmentVariable("publishingPassword");
-            string webjobUrl = string.Format("https://{0}.scm.azurewebsites.net/api/continuouswebjobs/{1}", websiteName, webjobName);
+            string webjobUrl = string.Format("https://{0}.azurewebsites.net", websiteName);
 
             while (true)
             {
@@ -28,10 +27,9 @@ namespace FeedbackLoop.Services
                 {
                     string auth = "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(userName + ':' + userPWD));
                     client.DefaultRequestHeaders.Add("authorization", auth);
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
                     var data = client.GetStringAsync(webjobUrl).Result;
-                    var result = JsonConvert.DeserializeObject(data) as JObject;
-                    Console.WriteLine("Heartbeat " + result.ToString());
+                    Console.WriteLine("Heartbeat success");
                 }
                 catch (Exception E)
                 {
