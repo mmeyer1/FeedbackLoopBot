@@ -149,10 +149,10 @@ namespace DiscordBot.Modules
         private bool IsMessagingUserOfficer()
         {
             var user = Context.Message.Author;
-            var userRoles = GetMessagingUser()?.Roles;
+            var guildRoles = GetMessagingUser()?.Guild?.Roles;
             // Configurable by guild in future release 
             var officerLevelRoles = new List<string> { "officer", "raidleader" };
-            return userRoles != null && userRoles.Any(role => officerLevelRoles.Any(olr => string.Equals(role.Name, olr, StringComparison.OrdinalIgnoreCase)));
+            return guildRoles != null && guildRoles.Any(role => officerLevelRoles.Any(olr => string.Equals(role.Name, olr, StringComparison.OrdinalIgnoreCase)));
         }
 
         private SocketGuildUser GetMessagingUser()
